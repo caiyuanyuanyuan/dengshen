@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>登神唬牌小游戏</title>
+    <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        :root {
+            --zzx: #FFD700; --zzy: #2ECC71; --zj: #E67E22;
+            --zh: #3498DB; --sxh: #E74C3C; --ds: #9B59B6;
+            --bg-dark: #1a1a1a;
+        }
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #ffe6ef; 
+    color: #222; 
+    margin: 0; 
+    padding: 16px;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    min-height: 100vh;
+}
+.container { 
+    width: 100%; 
+    max-width: 600px; 
+    background: #ffe6ef; 
+    padding: 20px; 
+    border-radius: 16px; 
+    box-shadow: 0 8px 24px rgba(180, 120, 140, 0.25); /* 阴影改成粉色调，不再纯黑 */
+}
+h1, h2, h3 { text-align: center; margin-top: 0; }
+.btn { 
+    background: #f29fb6; /* 温柔粉按钮，替代冷绿色 */
+    color: white; 
+    border: none; 
+    padding: 12px 20px; 
+    font-size: 16px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    margin: 5px; 
+    font-weight: bold; 
+}
+.btn:hover { background: #ec88a3; }
+.btn:disabled { 
+    background: #e0c8d0 !important; 
+    color: #999 !important; 
+    cursor: not-allowed; 
+}
+.btn-danger { background: #e87888; }
+input, select { 
+    padding: 12px; 
+    font-size: 16px; 
+    border-radius: 8px; 
+    border: 2px solid #f2d8e0; /* 浅粉边框替代灰白 */
+    margin: 5px; 
+    background: #fff; 
+    color: #222; 
+    outline: none;
+}
+input:focus, select:focus { border-color: #f29fb6; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* 原深蓝#34495e → 柔雾灰紫 #cfa8b8，适配粉色背景 */
+.status-bar { 
+    background: #cfa8b8; 
+    padding: 12px; 
+    border-radius: 8px; 
+    text-align: center; 
+    margin-bottom: 15px; 
+    font-weight: bold; 
+    font-size: 16px; 
+    color: #fff; /* 文字白色更清晰，替换刺眼黄字 */
+}
+.room-info { font-size: 13px; color: #886677; text-align: right; margin-bottom: 10px; }
+
+.players-list { display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 15px; gap: 8px; }
+.player-card { 
+    background: #e8c8d6; /* 浅粉灰卡片，替代深蓝 */
+    padding: 8px 16px; 
+    border-radius: 8px; 
+    min-width: 100px; 
+    text-align: center; 
+    border: 2px solid transparent; 
+    color: #333;
+}
+.player-card.active-turn { 
+    border-color: #f1789c; 
+    box-shadow: 0 0 8px #f1789c; 
+}
+
+/* 原深黑板桌#233342 → 淡粉灰桌面，虚线换深粉 */
+.table-area { 
+    background: #f7e0e8; 
+    border: 2px dashed #e89bb3; 
+    border-radius: 12px; 
+    padding: 15px; 
+    text-align: center; 
+    margin-bottom: 15px; 
+    min-height: 80px; 
+    color: #663344;
+}
+/* 日志区：纯黑太突兀，换成浅暗灰粉 */
+#log { 
+    max-height: 100px; 
+    overflow-y: auto; 
+    background: #e0c0cc; 
+    padding: 10px; 
+    border-radius: 8px; 
+    font-size: 12px; 
+    color: #442230; 
+    text-align: left; 
+    margin-bottom: 15px; 
+}
+
+.hand-area { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 8px; 
+    margin-top: 15px; 
+    padding-top: 15px; 
+    border-top: 2px solid #d8b0c0; /* 替换深蓝分割线 */
+}
+.card { 
+    padding: 10px 12px; 
+    border-radius: 8px; 
+    font-size: 13px; 
+    font-weight: bold; 
+    color: #333; 
+    background: #f2d0dd;
+    cursor: pointer; 
+    user-select: none; 
+    transition: 0.2s; 
+    border: 2px solid transparent; 
+    box-shadow: 0 4px 6px rgba(150, 100, 120, 0.15); 
+}
+.card.selected { 
+    transform: translateY(-8px); 
+    border-color: #f1789c; 
+    box-shadow: 0 6px 12px rgba(240, 120, 160, 0.4); 
+}
+        
+        .card-zzx { background: var(--zzx); color: #000; }
+        .card-zzy { background: var(--zzy); }
+        .card-zj { background: var(--zj); }
+        .card-zh { background: var(--zh); }
+        .card-sxh { background: var(--sxh); }
+        .card-ds { background: var(--ds); }
+        
+        .action-panel { display: flex; flex-direction: column; align-items: center; gap: 10px; background: #e0c0cc; padding: 12px; border-radius: 8px; }
+        .flex-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
+
+        /* 新增：震撼的弹窗结算大舞台 */
+        .showdown-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center;
+            flex-direction: column; color: #fff; text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        .showdown-overlay.active { display: flex; animation: fadeIn 0.3s ease-out; }
+        .showdown-title { font-size: 28px; font-weight: bold; color: #e74c3c; margin-bottom: 20px; text-shadow: 0 0 10px rgba(231,76,60,0.5); }
+        .showdown-cards { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 20px 0; min-height: 60px; }
+        .showdown-result { font-size: 22px; font-weight: bold; margin: 20px 0; line-height: 1.5; color: #f1c40f; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 1. 登录面板 -->
+    <div id="loginPanel" class="panel active">
+        <h1>登神唬牌</h1>
+        <p style="text-align: center; color: #886677; font-size: 14px; margin-bottom: 16px;">登登登登登准备好！</p>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 300px; margin: 0 auto;">
+            <input type="text" id="usernameInput" placeholder="输入你的昵称" maxLength="10">
+            <input type="text" id="roomInput" placeholder="输入房间号 (数字)">
+            <button class="btn" onclick="startJoinProcess()">进入游戏房间</button>
+        </div>
+        <!-- 👇 新增：游戏规则说明 👇 -->
+        <div style="background: #fff0f7; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #553344; line-height: 1.6; text-align: left;">
+            <h3 style="margin: 0 0 8px 0; text-align: center; color: #c85a7a;">📜 唬牌游戏规则说明</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li><strong>牌库</strong>：21张牌×人数。具体：紫色登神牌（万能牌）×1×人数，其余五种基础牌（黄色zzx、绿色zzy、桔色zj、蓝色zh、红色sxh）×4×人数。</li>
+                <li><strong>出牌与加码</strong>：点击手牌多选，输入你声称的牌数和牌型。下一家必须在同牌型下拼数量加码。</li>
+                <li><strong>轮空清空</strong>：一整轮所有人都没翻牌，桌面自动清空，下家可自由重选牌型出牌。</li>
+                <li><strong>质疑翻牌判定</strong>：下家可选择「翻牌」
+                    <ul style="margin: 4px 0; padding-left: 18px;">
+                        <li>真实牌（含万能牌）数量 <strong>不满足</strong> 声称数量 → 出牌者输，收回桌上所有牌</li>
+                        <li>真实牌数量 <strong>满足</strong> 声称数量 → 翻牌者输，收回桌上所有牌</li>
+                    </ul>
+                </li>
+                <li><strong>新一轮</strong>：由上轮输家重新发起出牌。</li>
+            </ul>
+        </div>
+        <!-- 👆 规则结束 👆 -->
+    </div>
+
+    <!-- 2. 房间等待面板 -->
+    <div id="roomPanel" class="panel">
+        <div class="room-info">房间号: <span id="displayRoomId" style="color:#1abc9c; font-weight:bold;">-</span> | <span id="roleTag" style="color:var(--zzx)">-</span></div>
+        <h2 id="lobbyTitle">正在建立连接...</h2>
+        
+        <div class="players-list" id="lobbyPlayersList"></div>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="btn" id="startBtn" onclick="hostStartGame()" disabled>等待人数足够 (至少3人)</button>
+        </div>
+    </div>
+
+    <!-- 3. 核心游戏面板 -->
+    <div id="gamePanel" class="panel">
+        <div class="status-bar" id="gameStatusBar">游戏准备中...</div>
+        <div class="players-list" id="gamePlayersList"></div>
+        
+        <div class="table-area">
+            <div style="color: #bdc3c7; font-size: 13px; margin-bottom: 5px;">桌面当前状况</div>
+            <div id="tableStatus" style="font-size: 16px; font-weight: bold; color: #e67e22;">暂无出牌</div>
+        </div>
+
+        <div id="log">系统日志：</div>
+
+        <div class="action-panel" id="actionPanel">
+            <div id="playControls" class="flex-row" style="display:none;">
+                <span>已选 <strong id="selectedCount" style="color:#e65c86;">0</strong> 张</span>
+                <select id="claimTypeSelect">
+                    <option value="zzx">22x</option>
+                    <option value="zzy">Zack</option>
+                    <option value="zj">Jeremy</option>
+                    <option value="zh">Left</option>
+                    <option value="sxh">Su</option>
+                </select>
+                <span>声称数量:</span>
+                <input type="number" id="claimNumInput" min="1" style="width:60px;" value="1">
+                <button class="btn" onclick="submitPlay()">确认出牌</button>
+            </div>
+
+            <div id="respondControls" class="flex-row" style="display:none;">
+                <button class="btn btn-danger" onclick="submitRespond(true)">🔴 翻牌 (不信)</button>
+                <button class="btn" style="background:#2ecc71;" onclick="submitRespond(false)">🟢 不翻 (加码)</button>
+            </div>
+            
+            <div id="waitMsg" style="color:grey; font-size: 14px;">等待其他玩家行动...</div>
+        </div>
+
+        <h3 style="margin-top:15px; text-align:left; font-size:16px;">我的手牌：</h3>
+        <div class="hand-area" id="myHand"></div>
+    </div>
+</div>
+
+<!-- 新增：全屏翻牌显式结算结果大舞台 -->
+<div id="showdownOverlay" class="showdown-overlay">
+    <div class="showdown-title" id="sdTitle">🚨 有人翻牌了！</div>
+    <div style="font-size: 16px; color: #bdc3c7;" id="sdInfo">正在查看上一家的真实底牌...</div>
+    <div class="showdown-cards" id="sdCardsArea"></div>
+    <div class="showdown-result" id="sdResultText">正在计算胜负...</div>
+    <button class="btn" style="background:#34495e; padding:12px 40px; font-size:18px;" id="sdCloseBtn" onclick="closeShowdownOverlay()">我知道了</button>
+</div>
+
+<script>
+    const ID_PREFIX = "SDFJ-HP-ROOM-V3-"; 
+    
+    let peer = null;
+    let connMap = new Map(); 
+    let hostConn = null;     
+    
+    let isHost = false;
+    let myId = "";
+    let myName = "";
+    let roomId = "";
+    
+    let gameState = {
+        players: [],       
+        cards: [],         
+        currentTurnIdx: 0, 
+        phase: "WAIT_PLAY",
+        tableCards: [],    
+        lastPlay: null,    
+        roundActions: 0    
+    };
+
+    const CARD_TYPES = {
+        zzx: { name: "22x", class: "card-zzx" },
+        zzy: { name: "Zack", class: "card-zzy" },
+        zj:  { name: "Jeremy",  class: "card-zj" },
+        zh:  { name: "Left",  class: "card-zh" },
+        sxh: { name: "Su", class: "card-sxh" },
+        ds:  { name: "登神！", class: "card-ds" }
+    };
+
+    function log(msg) {
+        const l = document.getElementById('log');
+        l.innerHTML += `<div>> ${msg}</div>`;
+        l.scrollTop = l.scrollHeight;
+    }
+
+    function startJoinProcess() {
+        myName = document.getElementById("usernameInput").value.trim();
+        roomId = document.getElementById("roomInput").value.trim();
+        if (!myName || !roomId) return alert("请输入昵称和房间号！");
+        
+        document.getElementById("loginPanel").classList.remove("active");
+        document.getElementById("roomPanel").classList.add("active");
+        document.getElementById("displayRoomId").innerText = roomId;
+
+        const targetHostId = ID_PREFIX + roomId + "-HOST";
+        peer = new Peer(targetHostId);
+
+        peer.on('open', () => {
+            isHost = true;
+            myId = targetHostId;
+            document.getElementById("roleTag").innerText = "房主";
+            document.getElementById("lobbyTitle").innerText = "创建房间成功，等待玩家加入...";
+            gameState.players = [{ id: myId, name: myName, cardCount: 0 }];
+            updateLobbyUI();
+            listenAsHost();
+        });
+
+        peer.on('error', (err) => {
+            if (err.type === 'unavailable-id') {
+                peer.destroy();
+                connectAsGuest();
+            } else {
+                alert("连接错误: " + err.type);
+                location.reload();
+            }
+        });
+    }
+
+    function connectAsGuest() {
+        isHost = false;
+        myId = ID_PREFIX + roomId + "-GUEST-" + Math.floor(Math.random() * 10000);
+        document.getElementById("roleTag").innerText = "房员";
+        document.getElementById("lobbyTitle").innerText = "正在连入房主大厅...";
+
+        peer = new Peer(myId);
+        peer.on('open', () => {
+            const targetHostId = ID_PREFIX + roomId + "-HOST";
+            hostConn = peer.connect(targetHostId, { reliable: true });
+            setupGuestConnection();
+        });
+    }
+
+    // ================= 房主事件总线 =================
+    function listenAsHost() {
+        peer.on('connection', c => {
+            c.on('open', () => {
+                c.on('data', data => {
+                    if (data.type === "JOIN") {
+                        if (!gameState.players.find(p => p.id === c.peer)) {
+                            connMap.set(c.peer, c);
+                            gameState.players.push({ id: c.peer, name: data.name, cardCount: 0 });
+                        }
+                        updateLobbyUI();
+                        broadcast({ type: "LOBBY_UPDATE", players: gameState.players });
+                    }
+                    if (data.type === "ACTION_PLAY") {
+                        processPlay(data.playerId, data.claimType, data.claimNum, data.actualCards);
+                    }
+                    if (data.type === "ACTION_RESPOND") {
+                        processRespond(data.playerId, data.wantsToFlip);
+                    }
+                });
+            });
+            c.on('close', () => {
+                connMap.delete(c.peer);
+                gameState.players = gameState.players.filter(p => p.id !== c.peer);
+                updateLobbyUI();
+                broadcast({ type: "LOBBY_UPDATE", players: gameState.players });
+            });
+        });
+    }
+
+    function broadcast(msg) {
+        connMap.forEach(c => { if (c && c.open) c.send(msg); });
+    }
+
+    // ================= 房员事件总线 =================
+    function setupGuestConnection() {
+        hostConn.on('open', () => {
+            log("✅ 成功切入房主网络信道");
+            hostConn.send({ type: "JOIN", name: myName });
+        });
+
+        hostConn.on('data', data => {
+            if (data.type === "LOBBY_UPDATE") {
+                gameState.players = data.players;
+                updateLobbyUI();
+            }
+            if (data.type === "GAME_START_CARDS") {
+                gameState.cards = data.cards;
+                renderMyHand();
+            }
+            if (data.type === "GAME_SYNC") {
+                gameState.players = data.state.players;
+                gameState.currentTurnIdx = data.state.currentTurnIdx;
+                gameState.phase = data.state.phase;
+                gameState.tableCards = data.state.tableCards;
+                gameState.lastPlay = data.state.lastPlay;
+                gameState.roundActions = data.state.roundActions;
+                syncStateToUI(data.log);
+            }
+            if (data.type === "GAME_SYNC_ADD_CARDS") {
+                if (data.targetId === myId) {
+                    gameState.cards = gameState.cards.concat(data.addCards);
+                    renderMyHand();
+                }
+            }
+            if (data.type === "SHOWDOWN_ALERT") {
+                triggerShowdownOverlay(data.title, data.info, data.realCards, data.resultText);
+            }
+        });
+    }
+
+    // ================= 正宗规则发牌模块重构 =================
+    function hostStartGame() {
+        const playerCount = gameState.players.length;
+        if (playerCount < 3) return alert("唬牌游戏至少需要3人才能开局！");
+        
+        // 1. 构建正宗规则总全量大牌池
+        let mainDeck = [];
+        for (let p = 0; p < playerCount; p++) {
+            mainDeck.push("ds"); // 每个人贡献1张万能登神
+            for(let i = 0; i < 4; i++) {
+                mainDeck.push("zzx"); mainDeck.push("zzy"); mainDeck.push("zj"); mainDeck.push("zh"); mainDeck.push("sxh");
+            }
+        }
+        
+        // 2. 彻底洗牌
+        mainDeck.sort(() => Math.random() - 0.5);
+        mainDeck.sort(() => Math.random() - 0.5); // 双重洗牌打散
+        
+        // 3. 均匀、完全随机地发给每个人，每人必定拿到固定21张，但卡牌类型错落随机
+        gameState.players.forEach((p, idx) => {
+            let pCards = mainDeck.slice(idx * 21, (idx + 1) * 21);
+            p.cardCount = 21;
+            
+            if (p.id === myId) {
+                gameState.cards = pCards;
+            } else {
+                let c = connMap.get(p.id);
+                if (c && c.open) c.send({ type: "GAME_START_CARDS", cards: pCards });
+            }
+        });
+        
+        gameState.currentTurnIdx = 0;
+        gameState.phase = "WAIT_PLAY";
+        gameState.tableCards = [];
+        gameState.lastPlay = null;
+        gameState.roundActions = 0;
+        
+        broadcast({ type: "GAME_SYNC", state: gameState, log: "🎲 游戏开始！所有人随机分发了总牌池中的21张牌。房主率先出牌！" });
+        syncStateToUI("🎲 游戏开始！所有人随机分发了总牌池中的21张牌。房主率先出牌！");
+    }
+
+    function processPlay(playerId, claimType, claimNum, actualCards) {
+        let player = gameState.players.find(p => p.id === playerId);
+        player.cardCount -= actualCards.length;
+        
+        gameState.tableCards.push({ playerId: playerId, realCards: actualCards });
+        gameState.lastPlay = { playerId: playerId, type: claimType, num: claimNum };
+        gameState.roundActions += 1;
+        
+        let msg = `${player.name} 出牌: 声称打了 【${claimNum} 张 ${CARD_TYPES[claimType].name}】`;
+        gameState.phase = "WAIT_RESPOND";
+        
+        broadcast({ type: "GAME_SYNC", state: gameState, log: msg });
+        syncStateToUI(msg);
+    }
+
+    // ================= 翻牌显式结果核心处理 =================
+    function processRespond(playerId, wantsToFlip) {
+        let responder = gameState.players.find(p => p.id === playerId);
+        let activePlayer = gameState.players[gameState.currentTurnIdx]; 
+        let msg = "";
+        
+        if (wantsToFlip) {
+            let lastTableChunk = gameState.tableCards[gameState.tableCards.length - 1];
+            let realCards = lastTableChunk.realCards;
+            let targetType = gameState.lastPlay.type;
+            let claimedNum = gameState.lastPlay.num;
+            
+            let matchCount = realCards.filter(c => c === targetType || c === "ds").length;
+            let isLiar = matchCount < claimedNum; 
+            
+            let loserId = isLiar ? activePlayer.id : responder.id;
+            let loser = gameState.players.find(p => p.id === loserId);
+            
+            let poolToTake = [];
+            gameState.tableCards.forEach(chunk => { poolToTake = poolToTake.concat(chunk.realCards); });
+            
+            // 构造震撼的全屏通知数据结构
+            let overlayTitle = `🚨 ${responder.name} 掀开了底牌！`;
+            let overlayInfo = `${activePlayer.name} 声称打出 [${claimedNum} 张 ${CARD_TYPES[targetType].name}]`;
+            let overlayResult = "";
+            
+            if (isLiar) {
+                overlayResult = `❌ 抓包成功！${activePlayer.name} 确实说谎了！\n惩罚：${activePlayer.name} 必须将桌上全部 ${poolToTake.length} 张牌收回手牌！`;
+                msg = `🚨 ${responder.name} 翻牌：成功抓包！${activePlayer.name} 说谎了，遭惩罚收回全部 ${poolToTake.length} 张牌。`;
+            } else {
+                overlayResult = `✅ 诚实守信！${activePlayer.name} 说的是真话！\n惩罚：质疑者 ${responder.name} 判断失误，收回桌上全部 ${poolToTake.length} 张牌！`;
+                msg = `🚨 ${responder.name} 翻牌：判断失误！${activePlayer.name} 说的是真话，${responder.name} 遭惩罚收回全部 ${poolToTake.length} 张牌。`;
+            }
+
+            // 同步分发惩罚牌
+            if (loserId === myId) {
+                gameState.cards = gameState.cards.concat(poolToTake);
+                renderMyHand();
+            } else {
+                let c = connMap.get(loserId);
+                if (c && c.open) c.send({ type: "GAME_SYNC_ADD_CARDS", targetId: loserId, addCards: poolToTake });
+            }
+            
+            loser.cardCount += poolToTake.length;
+            gameState.tableCards = [];
+            gameState.lastPlay = null;
+            gameState.roundActions = 0;
+            gameState.phase = "WAIT_PLAY";
+            gameState.currentTurnIdx = gameState.players.findIndex(p => p.id === loserId);
+
+            // 广播全屏弹窗事件给所有人
+            triggerShowdownOverlay(overlayTitle, overlayInfo, realCards, overlayResult);
+            broadcast({ type: "SHOWDOWN_ALERT", title: overlayTitle, info: overlayInfo, realCards: realCards, resultText: overlayResult });
+            
+        } else {
+            msg = `${responder.name} 选择【不翻】，准备加码。`;
+            if (gameState.roundActions >= gameState.players.length) {
+                msg += ` \n🔄 所有人均已过圈，桌面安全清空。下一家可重新选牌型出牌。`;
+                gameState.tableCards = [];
+                gameState.lastPlay = null;
+                gameState.roundActions = 0;
+            }
+            gameState.phase = "WAIT_PLAY";
+            gameState.currentTurnIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
+        }
+        
+        gameState.players.forEach(p => {
+            if (p.cardCount === 0) msg += ` \n🏆✨ 游戏结束！【${p.name}】 率先打光所有手牌获得胜利！`;
+        });
+
+        broadcast({ type: "GAME_SYNC", state: gameState, log: msg });
+        syncStateToUI(msg);
+    }
+
+    // ================= 震撼翻牌全屏遮罩逻辑 =================
+    function triggerShowdownOverlay(title, info, realCards, resultText) {
+        document.getElementById("sdTitle").innerText = title;
+        document.getElementById("sdInfo").innerText = info;
+        document.getElementById("sdResultText").innerText = resultText;
+        
+        let area = document.getElementById("sdCardsArea");
+        area.innerHTML = "";
+        
+        // 动态将上一家真实打下的底牌一张张亮出来！
+        realCards.forEach(c => {
+            let d = document.createElement("div");
+            d.className = `card ${CARD_TYPES[c].class}`;
+            d.style.cursor = "default";
+            d.style.fontSize = "16px";
+            d.style.padding = "15px 20px";
+            d.innerText = CARD_TYPES[c].name;
+            area.appendChild(d);
+        });
+        
+        document.getElementById("showdownOverlay").classList.add("active");
+    }
+
+    function closeShowdownOverlay() {
+        document.getElementById("showdownOverlay").classList.remove("active");
+    }
+
+    // ================= 界面渲染层 =================
+    function updateLobbyUI() {
+        let lobbyList = document.getElementById("lobbyPlayersList");
+        lobbyList.innerHTML = "";
+        gameState.players.forEach(p => {
+            let div = document.createElement("div");
+            div.className = "player-card";
+            div.innerText = p.name + (p.id === myId ? " (我)" : "");
+            lobbyList.appendChild(div);
+        });
+        
+        if (isHost) {
+            let startBtn = document.getElementById("startBtn");
+            if (gameState.players.length >= 3) {
+                startBtn.disabled = false;
+                startBtn.innerText = "玩家已齐，开始发牌";
+            } else {
+                startBtn.disabled = true;
+                startBtn.innerText = `等待人数足够 (当前 ${gameState.players.length}/3 人)`;
+            }
+        }
+    }
+
+    let selectedCardsIdx = [];
+
+    function syncStateToUI(logText) {
+        document.getElementById("roomPanel").classList.remove("active");
+        document.getElementById("gamePanel").classList.add("active");
+        if (logText) log(logText);
+
+        let activePlayer = gameState.players[gameState.currentTurnIdx];
+        let isMyTurn = (activePlayer.id === myId);
+        
+        let statusText = "";
+        if (gameState.phase === "WAIT_PLAY") {
+            statusText = isMyTurn ? "🔴 轮到你出牌了！请选牌并发出声明" : `等待 ${activePlayer.name} 出牌...`;
+        } else if (gameState.phase === "WAIT_RESPOND") {
+            let nextPlayerIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
+            let nextPlayer = gameState.players[nextPlayerIdx];
+            let isMyResponseTurn = (nextPlayer.id === myId);
+            statusText = isMyResponseTurn ? "⚠️ 决议时刻：【翻牌验证】还是【不翻加码】？" : `等待 ${nextPlayer.name} 决议是否翻牌...`;
+        }
+        document.getElementById("gameStatusBar").innerText = statusText;
+
+        let tableStatus = document.getElementById("tableStatus");
+        if (gameState.lastPlay) {
+            let lastPlayerName = gameState.players.find(p=>p.id===gameState.lastPlay.playerId)?.name || "未知";
+            tableStatus.innerHTML = `上一家 【${lastPlayerName}】 声称打出了：<br><span style="color:#f1c40f; font-size:20px;">${gameState.lastPlay.num} 张 ${CARD_TYPES[gameState.lastPlay.type].name}</span>`;
+        } else {
+            tableStatus.innerText = "桌面已清空，可任意发起数量和类型";
+        }
+
+        let gamePlayersList = document.getElementById("gamePlayersList");
+        gamePlayersList.innerHTML = "";
+        gameState.players.forEach((p, idx) => {
+            let pCard = document.createElement("div");
+            pCard.className = "player-card";
+            if (gameState.phase === "WAIT_PLAY" && idx === gameState.currentTurnIdx) pCard.classList.add("active-turn");
+            let nextIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
+            if (gameState.phase === "WAIT_RESPOND" && idx === nextIdx) pCard.classList.add("active-turn");
+            pCard.innerHTML = `<strong>${p.name}</strong><br>🎴 剩 ${p.cardCount} 张`;
+            gamePlayersList.appendChild(pCard);
+        });
+
+        hideAllControls();
+        if (gameState.phase === "WAIT_PLAY" && isMyTurn) {
+            document.getElementById("playControls").style.display = "flex";
+            let typeSelect = document.getElementById("claimTypeSelect");
+            if (gameState.lastPlay) {
+                typeSelect.value = gameState.lastPlay.type;
+                typeSelect.disabled = true;
+                document.getElementById("claimNumInput").value = parseInt(gameState.lastPlay.num) + 1;
+                document.getElementById("claimNumInput").min = parseInt(gameState.lastPlay.num) + 1;
+            } else {
+                typeSelect.disabled = false;
+                document.getElementById("claimNumInput").min = 1;
+                document.getElementById("claimNumInput").value = 1;
+            }
+        } else if (gameState.phase === "WAIT_RESPOND") {
+            let nextPlayerIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
+            if (gameState.players[nextPlayerIdx].id === myId) {
+                document.getElementById("respondControls").style.display = "flex";
+            } else {
+                document.getElementById("waitMsg").style.display = "block";
+            }
+        } else {
+            document.getElementById("waitMsg").style.display = "block";
+        }
+        renderMyHand();
+    }
+
+    function hideAllControls() {
+        document.getElementById("playControls").style.display = "none";
+        document.getElementById("respondControls").style.display = "none";
+        document.getElementById("waitMsg").style.display = "none";
+    }
+
+    function renderMyHand() {
+        let handArea = document.getElementById("myHand");
+        handArea.innerHTML = "";
+        gameState.cards.sort();
+
+        gameState.cards.forEach((cardType, idx) => {
+            let cardDiv = document.createElement("div");
+            cardDiv.className = `card ${CARD_TYPES[cardType].class}`;
+            if (selectedCardsIdx.includes(idx)) cardDiv.classList.add("selected");
+            cardDiv.innerText = CARD_TYPES[cardType].name;
+            
+            cardDiv.onclick = () => {
+                if (selectedCardsIdx.includes(idx)) {
+                    selectedCardsIdx = selectedCardsIdx.filter(i => i !== idx);
+                } else {
+                    selectedCardsIdx.push(idx);
+                }
+                cardDiv.classList.toggle("selected");
+                document.getElementById("selectedCount").innerText = selectedCardsIdx.length;
+                if (gameState.phase === "WAIT_PLAY") {
+                    document.getElementById("claimNumInput").value = Math.max(selectedCardsIdx.length, document.getElementById("claimNumInput").min);
+                }
+            };
+            handArea.appendChild(cardDiv);
+        });
+    }
+
+    function submitPlay() {
+        if (selectedCardsIdx.length === 0) return alert("请先在下方手牌区选择要打出的牌（可多选虚晃一枪）！");
+        let claimType = document.getElementById("claimTypeSelect").value;
+        let claimNum = parseInt(document.getElementById("claimNumInput").value);
+        
+        if (gameState.lastPlay && claimNum <= gameState.lastPlay.num) {
+            return alert(`数量必须比上一家声称的 (${gameState.lastPlay.num}张) 更多！`);
+        }
+
+        let actualCards = [];
+        selectedCardsIdx.sort((a,b) => b-a);
+        selectedCardsIdx.forEach(idx => {
+            actualCards.push(gameState.cards[idx]);
+            gameState.cards.splice(idx, 1);
+        });
+
+        selectedCardsIdx = [];
+        document.getElementById("selectedCount").innerText = 0;
+
+        if (isHost) {
+            processPlay(myId, claimType, claimNum, actualCards);
+        } else {
+            hostConn.send({
+                type: "ACTION_PLAY",
+                playerId: myId,
+                claimType: claimType,
+                claimNum: claimNum,
+                actualCards: actualCards
+            });
+        }
+    }
+
+    function submitRespond(wantsToFlip) {
+        if (isHost) {
+            processRespond(myId, wantsToFlip);
+        } else {
+            hostConn.send({
+                type: "ACTION_RESPOND",
+                playerId: myId,
+                wantsToFlip: wantsToFlip
+            });
+        }
+    }
+</script>
+</body>
+</html>
