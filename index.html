@@ -11,138 +11,137 @@
             --zh: #3498DB; --sxh: #E74C3C; --ds: #9B59B6;
             --bg-dark: #1a1a1a;
         }
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: #ffe6ef; 
-    color: #222; 
-    margin: 0; 
-    padding: 16px;
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    min-height: 100vh;
-}
-.container { 
-    width: 100%; 
-    max-width: 600px; 
-    background: #ffe6ef; 
-    padding: 20px; 
-    border-radius: 16px; 
-    box-shadow: 0 8px 24px rgba(180, 120, 140, 0.25); /* 阴影改成粉色调，不再纯黑 */
-}
-h1, h2, h3 { text-align: center; margin-top: 0; }
-.btn { 
-    background: #f29fb6; /* 温柔粉按钮，替代冷绿色 */
-    color: white; 
-    border: none; 
-    padding: 12px 20px; 
-    font-size: 16px; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    margin: 5px; 
-    font-weight: bold; 
-}
-.btn:hover { background: #ec88a3; }
-.btn:disabled { 
-    background: #e0c8d0 !important; 
-    color: #999 !important; 
-    cursor: not-allowed; 
-}
-.btn-danger { background: #e87888; }
-input, select { 
-    padding: 12px; 
-    font-size: 16px; 
-    border-radius: 8px; 
-    border: 2px solid #f2d8e0; /* 浅粉边框替代灰白 */
-    margin: 5px; 
-    background: #fff; 
-    color: #222; 
-    outline: none;
-}
-input:focus, select:focus { border-color: #f29fb6; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #ffe6ef; 
+            color: #222; 
+            margin: 0; 
+            padding: 16px;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh;
+        }
+        .container { 
+            width: 100%; 
+            max-width: 600px; 
+            background: #ffe6ef; 
+            padding: 20px; 
+            border-radius: 16px; 
+            box-shadow: 0 8px 24px rgba(180, 120, 140, 0.25);
+        }
+        h1, h2, h3 { text-align: center; margin-top: 0; }
+        .btn { 
+            background: #f29fb6; 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 5px; 
+            font-weight: bold; 
+        }
+        .btn:hover { background: #ec88a3; }
+        .btn:disabled { 
+            background: #e0c8d0 !important; 
+            color: #999 !important; 
+            cursor: not-allowed; 
+        }
+        .btn-danger { background: #e87888; }
+        .btn-secondary { background: #95a5a6; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        input, select { 
+            padding: 12px; 
+            font-size: 16px; 
+            border-radius: 8px; 
+            border: 2px solid #f2d8e0; 
+            margin: 5px; 
+            background: #fff; 
+            color: #222; 
+            outline: none;
+        }
+        input:focus, select:focus { border-color: #f29fb6; }
 
-.panel { display: none; }
-.panel.active { display: block; }
+        .panel { display: none; }
+        .panel.active { display: block; }
 
-/* 原深蓝#34495e → 柔雾灰紫 #cfa8b8，适配粉色背景 */
-.status-bar { 
-    background: #cfa8b8; 
-    padding: 12px; 
-    border-radius: 8px; 
-    text-align: center; 
-    margin-bottom: 15px; 
-    font-weight: bold; 
-    font-size: 16px; 
-    color: #fff; /* 文字白色更清晰，替换刺眼黄字 */
-}
-.room-info { font-size: 13px; color: #886677; text-align: right; margin-bottom: 10px; }
+        .status-bar { 
+            background: #cfa8b8; 
+            padding: 12px; 
+            border-radius: 8px; 
+            text-align: center; 
+            margin-bottom: 15px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            color: #fff; 
+        }
+        .room-info { font-size: 13px; color: #886677; text-align: right; margin-bottom: 10px; }
 
-.players-list { display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 15px; gap: 8px; }
-.player-card { 
-    background: #e8c8d6; /* 浅粉灰卡片，替代深蓝 */
-    padding: 8px 16px; 
-    border-radius: 8px; 
-    min-width: 100px; 
-    text-align: center; 
-    border: 2px solid transparent; 
-    color: #333;
-}
-.player-card.active-turn { 
-    border-color: #f1789c; 
-    box-shadow: 0 0 8px #f1789c; 
-}
+        .players-list { display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 15px; gap: 8px; }
+        .player-card { 
+            background: #e8c8d6; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            min-width: 100px; 
+            text-align: center; 
+            border: 2px solid transparent; 
+            color: #333;
+        }
+        .player-card.active-turn { 
+            border-color: #f1789c; 
+            box-shadow: 0 0 8px #f1789c; 
+        }
 
-/* 原深黑板桌#233342 → 淡粉灰桌面，虚线换深粉 */
-.table-area { 
-    background: #f7e0e8; 
-    border: 2px dashed #e89bb3; 
-    border-radius: 12px; 
-    padding: 15px; 
-    text-align: center; 
-    margin-bottom: 15px; 
-    min-height: 80px; 
-    color: #663344;
-}
-/* 日志区：纯黑太突兀，换成浅暗灰粉 */
-#log { 
-    max-height: 100px; 
-    overflow-y: auto; 
-    background: #e0c0cc; 
-    padding: 10px; 
-    border-radius: 8px; 
-    font-size: 12px; 
-    color: #442230; 
-    text-align: left; 
-    margin-bottom: 15px; 
-}
+        .table-area { 
+            background: #f7e0e8; 
+            border: 2px dashed #e89bb3; 
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: center; 
+            margin-bottom: 15px; 
+            min-height: 80px; 
+            color: #663344;
+        }
+        #log { 
+            max-height: 100px; 
+            overflow-y: auto; 
+            background: #e0c0cc; 
+            padding: 10px; 
+            border-radius: 8px; 
+            font-size: 12px; 
+            color: #442230; 
+            text-align: left; 
+            margin-bottom: 15px; 
+        }
 
-.hand-area { 
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 8px; 
-    margin-top: 15px; 
-    padding-top: 15px; 
-    border-top: 2px solid #d8b0c0; /* 替换深蓝分割线 */
-}
-.card { 
-    padding: 10px 12px; 
-    border-radius: 8px; 
-    font-size: 13px; 
-    font-weight: bold; 
-    color: #333; 
-    background: #f2d0dd;
-    cursor: pointer; 
-    user-select: none; 
-    transition: 0.2s; 
-    border: 2px solid transparent; 
-    box-shadow: 0 4px 6px rgba(150, 100, 120, 0.15); 
-}
-.card.selected { 
-    transform: translateY(-8px); 
-    border-color: #f1789c; 
-    box-shadow: 0 6px 12px rgba(240, 120, 160, 0.4); 
-}
+        .hand-area { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 8px; 
+            margin-top: 15px; 
+            padding-top: 15px; 
+            border-top: 2px solid #d8b0c0; 
+        }
+        .card { 
+            padding: 10px 12px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            color: #333; 
+            background: #f2d0dd;
+            cursor: pointer; 
+            user-select: none; 
+            transition: 0.2s; 
+            border: 2px solid transparent; 
+            box-shadow: 0 4px 6px rgba(150, 100, 120, 0.15); 
+        }
+        .card.selected { 
+            transform: translateY(-8px); 
+            border-color: #f1789c; 
+            box-shadow: 0 6px 12px rgba(240, 120, 160, 0.4); 
+        }
         
         .card-zzx { background: var(--zzx); color: #000; }
         .card-zzy { background: var(--zzy); }
@@ -154,7 +153,6 @@ input:focus, select:focus { border-color: #f29fb6; }
         .action-panel { display: flex; flex-direction: column; align-items: center; gap: 10px; background: #e0c0cc; padding: 12px; border-radius: 8px; }
         .flex-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
 
-        /* 新增：震撼的弹窗结算大舞台 */
         .showdown-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center;
@@ -175,28 +173,21 @@ input:focus, select:focus { border-color: #f29fb6; }
         <h1>登神唬牌</h1>
         <p style="text-align: center; color: #886677; font-size: 14px; margin-bottom: 16px;">登登登登登准备好！</p>
 
-        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 300px; margin: 0 auto;">
+        <div style="display: flex; flex-direction: column; gap: 8px; max-width: 300px; margin: 0 auto; margin-bottom: 20px;">
             <input type="text" id="usernameInput" placeholder="输入你的昵称" maxLength="10">
             <input type="text" id="roomInput" placeholder="输入房间号 (数字)">
             <button class="btn" onclick="startJoinProcess()">进入游戏房间</button>
         </div>
-        <!-- 👇 新增：游戏规则说明 👇 -->
-        <div style="background: #fff0f7; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #553344; line-height: 1.6; text-align: left;">
-            <h3 style="margin: 0 0 8px 0; text-align: center; color: #c85a7a;">📜 唬牌游戏规则说明</h3>
+        <!-- 游戏规则说明 -->
+        <div style="background: #fff0f7; border-radius: 12px; padding: 14px 18px; font-size: 13px; color: #553344; line-height: 1.6; text-align: left;">
+            <h3 style="margin: 0 0 8px 0; text-align: center; color: #c85a7a;">📜 正宗唬牌游戏规则说明</h3>
             <ul style="margin: 0; padding-left: 20px;">
-                <li><strong>牌库</strong>：21张牌×人数。具体：紫色登神牌（万能牌）×1×人数，其余五种基础牌（黄色zzx、绿色zzy、桔色zj、蓝色zh、红色sxh）×4×人数。</li>
-                <li><strong>出牌与加码</strong>：点击手牌多选，输入你声称的牌数和牌型。下一家必须在同牌型下拼数量加码。</li>
-                <li><strong>轮空清空</strong>：一整轮所有人都没翻牌，桌面自动清空，下家可自由重选牌型出牌。</li>
-                <li><strong>质疑翻牌判定</strong>：下家可选择「翻牌」
-                    <ul style="margin: 4px 0; padding-left: 18px;">
-                        <li>真实牌（含万能牌）数量 <strong>不满足</strong> 声称数量 → 出牌者输，收回桌上所有牌</li>
-                        <li>真实牌数量 <strong>满足</strong> 声称数量 → 翻牌者输，收回桌上所有牌</li>
-                    </ul>
-                </li>
-                <li><strong>新一轮</strong>：由上轮输家重新发起出牌。</li>
+                <li><strong>加码与决议</strong>：任何玩家出牌后，下家必须首先面对<strong>「决议期」</strong>（翻牌不信 或 不翻继续）。</li>
+                <li><strong>连环质疑链</strong>：如果下家选择【不翻】，但他觉得自己没法或者不想加码出牌，可以选择【过牌(Pass)】。**此时桌面上的牌并未消失，再下家依然可以选择翻牌抓最早出牌那人的谎言！**</li>
+                <li><strong>全满轮空</strong>：直到连续 Pass 的人数累积等于全场总人数（即一整圈人都不抓、也无人加码），桌面安全清空。由最后真正出牌的人重新掌握自由定义牌型权。</li>
+                <li><strong>真神胜出</strong>：打光手牌后，必须走完一整圈的质疑考验，或者被翻牌判定为诚实，才能最终判定为安全登神获胜！</li>
             </ul>
         </div>
-        <!-- 👆 规则结束 👆 -->
     </div>
 
     <!-- 2. 房间等待面板 -->
@@ -223,6 +214,13 @@ input:focus, select:focus { border-color: #f29fb6; }
         <div id="log">系统日志：</div>
 
         <div class="action-panel" id="actionPanel">
+            <!-- 阶段一：决议控制区（翻牌 或 不翻） -->
+            <div id="respondControls" class="flex-row" style="display:none;">
+                <button class="btn btn-danger" onclick="submitRespond(true)">🔴 翻牌 (我不信！)</button>
+                <button class="btn" style="background:#2ecc71;" onclick="submitRespond(false)">🟢 不翻 (进入我的决策轮)</button>
+            </div>
+
+            <!-- 阶段二：出牌控制区（加码出牌 或 选择过牌） -->
             <div id="playControls" class="flex-row" style="display:none;">
                 <span>已选 <strong id="selectedCount" style="color:#e65c86;">0</strong> 张</span>
                 <select id="claimTypeSelect">
@@ -234,12 +232,8 @@ input:focus, select:focus { border-color: #f29fb6; }
                 </select>
                 <span>声称数量:</span>
                 <input type="number" id="claimNumInput" min="1" style="width:60px;" value="1">
-                <button class="btn" onclick="submitPlay()">确认出牌</button>
-            </div>
-
-            <div id="respondControls" class="flex-row" style="display:none;">
-                <button class="btn btn-danger" onclick="submitRespond(true)">🔴 翻牌 (不信)</button>
-                <button class="btn" style="background:#2ecc71;" onclick="submitRespond(false)">🟢 不翻 (加码)</button>
+                <button class="btn" onclick="submitPlay()">确认加码出牌</button>
+                <button class="btn btn-secondary" id="passBtn" onclick="submitPass()">选择过牌(Pass)</button>
             </div>
             
             <div id="waitMsg" style="color:grey; font-size: 14px;">等待其他玩家行动...</div>
@@ -250,7 +244,7 @@ input:focus, select:focus { border-color: #f29fb6; }
     </div>
 </div>
 
-<!-- 新增：全屏翻牌显式结算结果大舞台 -->
+<!-- 全屏翻牌显式结算结果大舞台 -->
 <div id="showdownOverlay" class="showdown-overlay">
     <div class="showdown-title" id="sdTitle">🚨 有人翻牌了！</div>
     <div style="font-size: 16px; color: #bdc3c7;" id="sdInfo">正在查看上一家的真实底牌...</div>
@@ -274,11 +268,12 @@ input:focus, select:focus { border-color: #f29fb6; }
     let gameState = {
         players: [],       
         cards: [],         
-        currentTurnIdx: 0, 
-        phase: "WAIT_PLAY",
+        currentTurnIdx: 0, // 当前拥有行动决议权的玩家索引
+        phase: "WAIT_RESPOND", // 状态机调整：玩家面对桌面的牌永远先进入 WAIT_RESPOND (质疑状态)
         tableCards: [],    
-        lastPlay: null,    
-        roundActions: 0    
+        lastPlay: null,    // 上一次生效的桌面声明
+        roundActions: 0,   // 连续Pass的计数器
+        gameOver: false    
     };
 
     const CARD_TYPES = {
@@ -343,11 +338,12 @@ input:focus, select:focus { border-color: #f29fb6; }
         });
     }
 
-    // ================= 房主事件总线 =================
+    // ================= 房主逻辑核心总线 =================
     function listenAsHost() {
         peer.on('connection', c => {
             c.on('open', () => {
                 c.on('data', data => {
+                    if (gameState.gameOver) return;
                     if (data.type === "JOIN") {
                         if (!gameState.players.find(p => p.id === c.peer)) {
                             connMap.set(c.peer, c);
@@ -361,6 +357,9 @@ input:focus, select:focus { border-color: #f29fb6; }
                     }
                     if (data.type === "ACTION_RESPOND") {
                         processRespond(data.playerId, data.wantsToFlip);
+                    }
+                    if (data.type === "ACTION_PASS") {
+                        processPass(data.playerId);
                     }
                 });
             });
@@ -377,7 +376,6 @@ input:focus, select:focus { border-color: #f29fb6; }
         connMap.forEach(c => { if (c && c.open) c.send(msg); });
     }
 
-    // ================= 房员事件总线 =================
     function setupGuestConnection() {
         hostConn.on('open', () => {
             log("✅ 成功切入房主网络信道");
@@ -400,6 +398,7 @@ input:focus, select:focus { border-color: #f29fb6; }
                 gameState.tableCards = data.state.tableCards;
                 gameState.lastPlay = data.state.lastPlay;
                 gameState.roundActions = data.state.roundActions;
+                gameState.gameOver = data.state.gameOver;
                 syncStateToUI(data.log);
             }
             if (data.type === "GAME_SYNC_ADD_CARDS") {
@@ -414,25 +413,22 @@ input:focus, select:focus { border-color: #f29fb6; }
         });
     }
 
-    // ================= 正宗规则发牌模块重构 =================
+    // ================= 发牌与开局 =================
     function hostStartGame() {
         const playerCount = gameState.players.length;
         if (playerCount < 3) return alert("唬牌游戏至少需要3人才能开局！");
         
-        // 1. 构建正宗规则总全量大牌池
         let mainDeck = [];
         for (let p = 0; p < playerCount; p++) {
-            mainDeck.push("ds"); // 每个人贡献1张万能登神
+            mainDeck.push("ds"); 
             for(let i = 0; i < 4; i++) {
                 mainDeck.push("zzx"); mainDeck.push("zzy"); mainDeck.push("zj"); mainDeck.push("zh"); mainDeck.push("sxh");
             }
         }
         
-        // 2. 彻底洗牌
         mainDeck.sort(() => Math.random() - 0.5);
-        mainDeck.sort(() => Math.random() - 0.5); // 双重洗牌打散
+        mainDeck.sort(() => Math.random() - 0.5); 
         
-        // 3. 均匀、完全随机地发给每个人，每人必定拿到固定21张，但卡牌类型错落随机
         gameState.players.forEach((p, idx) => {
             let pCards = mainDeck.slice(idx * 21, (idx + 1) * 21);
             p.cardCount = 21;
@@ -446,65 +442,78 @@ input:focus, select:focus { border-color: #f29fb6; }
         });
         
         gameState.currentTurnIdx = 0;
-        gameState.phase = "WAIT_PLAY";
+        gameState.phase = "WAIT_PLAY"; // 首发局不需要翻牌，直接可以出
         gameState.tableCards = [];
         gameState.lastPlay = null;
         gameState.roundActions = 0;
+        gameState.gameOver = false;
         
-        broadcast({ type: "GAME_SYNC", state: gameState, log: "🎲 游戏开始！所有人随机分发了总牌池中的21张牌。房主率先出牌！" });
-        syncStateToUI("🎲 游戏开始！所有人随机分发了总牌池中的21张牌。房主率先出牌！");
+        let startMsg = "🎲 游戏开始！每人分发21张牌。房主率先自由出牌！";
+        broadcast({ type: "GAME_SYNC", state: gameState, log: startMsg });
+        syncStateToUI(startMsg);
     }
 
+    // ================= 玩家打牌/加码出牌 =================
+// ================= 玩家打牌/加码出牌 =================
     function processPlay(playerId, claimType, claimNum, actualCards) {
         let player = gameState.players.find(p => p.id === playerId);
         player.cardCount -= actualCards.length;
         
         gameState.tableCards.push({ playerId: playerId, realCards: actualCards });
         gameState.lastPlay = { playerId: playerId, type: claimType, num: claimNum };
-        gameState.roundActions += 1;
+        gameState.roundActions = 0; // 重置连续Pass计数器
         
         let msg = `${player.name} 出牌: 声称打了 【${claimNum} 张 ${CARD_TYPES[claimType].name}】`;
-        gameState.phase = "WAIT_RESPOND";
+        
+        // 如果这时候他出完手牌了，加一条震撼日志公告，让大家紧张起来
+        if (player.cardCount === 0) {
+            msg += ` \n⚠️ 【${player.name}】 已经打光了所有手牌！进入登神考验期！`;
+        }
+        
+        gameState.currentTurnIdx = (gameState.players.findIndex(p => p.id === playerId) + 1) % gameState.players.length;
+        gameState.phase = "WAIT_RESPOND"; 
         
         broadcast({ type: "GAME_SYNC", state: gameState, log: msg });
         syncStateToUI(msg);
     }
 
-    // ================= 翻牌显式结果核心处理 =================
+// ================= 玩家面对桌上牌的决议（翻牌 或 不翻） =================
     function processRespond(playerId, wantsToFlip) {
         let responder = gameState.players.find(p => p.id === playerId);
-        let activePlayer = gameState.players[gameState.currentTurnIdx]; 
+        let lastRealPlay = gameState.lastPlay; 
+        let activePlayer = gameState.players.find(p => p.id === lastRealPlay.playerId); 
         let msg = "";
         
         if (wantsToFlip) {
             let lastTableChunk = gameState.tableCards[gameState.tableCards.length - 1];
             let realCards = lastTableChunk.realCards;
-            let targetType = gameState.lastPlay.type;
-            let claimedNum = gameState.lastPlay.num;
+            let targetType = lastRealPlay.type;
+            let claimedNum = lastRealPlay.num;
             
             let matchCount = realCards.filter(c => c === targetType || c === "ds").length;
             let isLiar = matchCount < claimedNum; 
             
             let loserId = isLiar ? activePlayer.id : responder.id;
+            let winnerId = isLiar ? responder.id : activePlayer.id;
             let loser = gameState.players.find(p => p.id === loserId);
+            let winner = gameState.players.find(p => p.id === winnerId);
             
             let poolToTake = [];
             gameState.tableCards.forEach(chunk => { poolToTake = poolToTake.concat(chunk.realCards); });
             
-            // 构造震撼的全屏通知数据结构
-            let overlayTitle = `🚨 ${responder.name} 掀开了底牌！`;
-            let overlayInfo = `${activePlayer.name} 声称打出 [${claimedNum} 张 ${CARD_TYPES[targetType].name}]`;
+            let overlayTitle = `🚨 ${responder.name} 掀开了 ${activePlayer.name} 的底牌！`;
+            let overlayInfo = `${activePlayer.name} 曾声称打出 [${claimedNum} 张 ${CARD_TYPES[targetType].name}]，实际含有同款+万能共 ${matchCount} 张`;
             let overlayResult = "";
             
             if (isLiar) {
-                overlayResult = `❌ 抓包成功！${activePlayer.name} 确实说谎了！\n惩罚：${activePlayer.name} 必须将桌上全部 ${poolToTake.length} 张牌收回手牌！`;
-                msg = `🚨 ${responder.name} 翻牌：成功抓包！${activePlayer.name} 说谎了，遭惩罚收回全部 ${poolToTake.length} 张牌。`;
+                overlayResult = `❌ 抓包成功！${activePlayer.name} 说谎！\n惩罚：${activePlayer.name} 收回桌上全部 ${poolToTake.length} 张牌！`;
+                msg = `🚨 ${responder.name} 翻牌：抓包成功！${activePlayer.name} 说谎，强制收回全部 ${poolToTake.length} 张牌。`;
             } else {
-                overlayResult = `✅ 诚实守信！${activePlayer.name} 说的是真话！\n惩罚：质疑者 ${responder.name} 判断失误，收回桌上全部 ${poolToTake.length} 张牌！`;
-                msg = `🚨 ${responder.name} 翻牌：判断失误！${activePlayer.name} 说的是真话，${responder.name} 遭惩罚收回全部 ${poolToTake.length} 张牌。`;
+                overlayResult = `✅ 诚实守信！${activePlayer.name} 没说谎！\n惩罚：质疑者 ${responder.name} 判断失误，收回桌上全部 ${poolToTake.length} 张牌！`;
+                msg = `🚨 ${responder.name} 翻牌：误判！${activePlayer.name} 说的是真话，${responder.name} 接收全部 ${poolToTake.length} 张牌。`;
             }
 
-            // 同步分发惩罚牌
+            // 分发惩罚牌堆给输的人
             if (loserId === myId) {
                 gameState.cards = gameState.cards.concat(poolToTake);
                 renderMyHand();
@@ -512,39 +521,79 @@ input:focus, select:focus { border-color: #f29fb6; }
                 let c = connMap.get(loserId);
                 if (c && c.open) c.send({ type: "GAME_SYNC_ADD_CARDS", targetId: loserId, addCards: poolToTake });
             }
-            
             loser.cardCount += poolToTake.length;
-            gameState.tableCards = [];
-            gameState.lastPlay = null;
-            gameState.roundActions = 0;
-            gameState.phase = "WAIT_PLAY";
-            gameState.currentTurnIdx = gameState.players.findIndex(p => p.id === loserId);
 
-            // 广播全屏弹窗事件给所有人
+            // ✨【核心赢法判定判定：情况 A & 情况 B 融合】
+            // 不管是谁被掀，只要验证完之后，出牌的那个人 (activePlayer) 确实没撒谎 (isLiar为false) 且 牌数为 0
+            if (!isLiar && activePlayer.cardCount === 0) {
+                overlayResult += `\n\n🏆✨ 诚实真神！【${activePlayer.name}】手牌清空且真话通过验证，赢得最终胜利！`;
+                msg += ` \n🏆 游戏结束！【${activePlayer.name}】获得最终胜利！`;
+                gameState.gameOver = true;
+            }
+
+            // 如果没赢，则重置桌面状态，由输家开新牌
+            if (!gameState.gameOver) {
+                gameState.tableCards = [];
+                gameState.lastPlay = null;
+                gameState.roundActions = 0;
+                gameState.phase = "WAIT_PLAY"; 
+                gameState.currentTurnIdx = gameState.players.findIndex(p => p.id === loserId);
+            }
+
             triggerShowdownOverlay(overlayTitle, overlayInfo, realCards, overlayResult);
             broadcast({ type: "SHOWDOWN_ALERT", title: overlayTitle, info: overlayInfo, realCards: realCards, resultText: overlayResult });
             
         } else {
-            msg = `${responder.name} 选择【不翻】，准备加码。`;
-            if (gameState.roundActions >= gameState.players.length) {
-                msg += ` \n🔄 所有人均已过圈，桌面安全清空。下一家可重新选牌型出牌。`;
-                gameState.tableCards = [];
-                gameState.lastPlay = null;
-                gameState.roundActions = 0;
-            }
-            gameState.phase = "WAIT_PLAY";
-            gameState.currentTurnIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
+            msg = `${responder.name} 选择【不翻牌】，进入其出牌决策阶段。`;
+            gameState.phase = "WAIT_PLAY"; 
         }
         
-        gameState.players.forEach(p => {
-            if (p.cardCount === 0) msg += ` \n🏆✨ 游戏结束！【${p.name}】 率先打光所有手牌获得胜利！`;
-        });
-
         broadcast({ type: "GAME_SYNC", state: gameState, log: msg });
         syncStateToUI(msg);
     }
 
-    // ================= 震撼翻牌全屏遮罩逻辑 =================
+    // ================= 玩家选择不翻牌后：选择【过牌(Pass)】 =================
+// ================= 玩家选择不翻牌后：选择【过牌(Pass)】 =================
+    function processPass(playerId) {
+        let player = gameState.players.find(p => p.id === playerId);
+        gameState.roundActions += 1; 
+        
+        let msg = `${player.name} 选择【过牌(Pass)】。`;
+        
+        // 连续 Pass 达到 总人数 - 1，表示这一手牌安全落地
+        if (gameState.roundActions >= gameState.players.length - 1) {
+            msg += " \n🔄 全场轮空！桌面威胁安全解除，卡牌全部清空。";
+            
+            if (gameState.lastPlay) {
+                let lastPlayer = gameState.players.find(p => p.id === gameState.lastPlay.playerId);
+                
+                // ✨【核心赢法判定】：如果这个人打光了牌，且场上所有人都 Pass 放过了他，完美瞒天过海！
+                if (lastPlayer && lastPlayer.cardCount === 0) {
+                    msg += ` \n🏆✨ 瞒天过海！【${lastPlayer.name}】 的手牌已全部安全渡过质疑期，获得最终胜利！`;
+                    gameState.gameOver = true;
+                }
+                
+                // 下一轮自由出牌权归属于最后出牌的人
+                let lastPlayerIdx = gameState.players.findIndex(p => p.id === gameState.lastPlay.playerId);
+                if (lastPlayerIdx !== -1) gameState.currentTurnIdx = lastPlayerIdx;
+            }
+            
+            if (!gameState.gameOver) {
+                gameState.tableCards = [];
+                gameState.lastPlay = null;
+                gameState.roundActions = 0;
+                gameState.phase = "WAIT_PLAY"; 
+            }
+        } else {
+            gameState.currentTurnIdx = (gameState.players.findIndex(p => p.id === playerId) + 1) % gameState.players.length;
+            gameState.phase = "WAIT_RESPOND"; 
+        }
+        
+        broadcast({ type: "GAME_SYNC", state: gameState, log: msg });
+        syncStateToUI(msg);
+    }
+
+    // ================= 展现翻牌震撼大舞台 =================
     function triggerShowdownOverlay(title, info, realCards, resultText) {
         document.getElementById("sdTitle").innerText = title;
         document.getElementById("sdInfo").innerText = info;
@@ -553,7 +602,6 @@ input:focus, select:focus { border-color: #f29fb6; }
         let area = document.getElementById("sdCardsArea");
         area.innerHTML = "";
         
-        // 动态将上一家真实打下的底牌一张张亮出来！
         realCards.forEach(c => {
             let d = document.createElement("div");
             d.className = `card ${CARD_TYPES[c].class}`;
@@ -571,7 +619,7 @@ input:focus, select:focus { border-color: #f29fb6; }
         document.getElementById("showdownOverlay").classList.remove("active");
     }
 
-    // ================= 界面渲染层 =================
+    // ================= 游戏操控台及UI核心渲染同步 =================
     function updateLobbyUI() {
         let lobbyList = document.getElementById("lobbyPlayersList");
         lobbyList.innerHTML = "";
@@ -603,63 +651,81 @@ input:focus, select:focus { border-color: #f29fb6; }
 
         let activePlayer = gameState.players[gameState.currentTurnIdx];
         let isMyTurn = (activePlayer.id === myId);
-        
+
+        // 状态文字高亮通知
         let statusText = "";
-        if (gameState.phase === "WAIT_PLAY") {
-            statusText = isMyTurn ? "🔴 轮到你出牌了！请选牌并发出声明" : `等待 ${activePlayer.name} 出牌...`;
+        if (gameState.gameOver) {
+            statusText = "🏁 游戏已宣告结束！";
         } else if (gameState.phase === "WAIT_RESPOND") {
-            let nextPlayerIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
-            let nextPlayer = gameState.players[nextPlayerIdx];
-            let isMyResponseTurn = (nextPlayer.id === myId);
-            statusText = isMyResponseTurn ? "⚠️ 决议时刻：【翻牌验证】还是【不翻加码】？" : `等待 ${nextPlayer.name} 决议是否翻牌...`;
+            statusText = isMyTurn ? "⚠️ 决议时刻：轮到你！你要【翻牌抓谎】还是【不翻牌认可】？" : `等待 ${activePlayer.name} 决议是否翻牌上一家...`;
+        } else if (gameState.phase === "WAIT_PLAY") {
+            statusText = isMyTurn ? "🔴 出牌时刻：请做出你的【加码出牌】或选择【过牌(Pass)】" : `等待 ${activePlayer.name} 出牌或过牌...`;
         }
         document.getElementById("gameStatusBar").innerText = statusText;
 
+        // 渲染当前桌面残存的唬牌宣告
         let tableStatus = document.getElementById("tableStatus");
         if (gameState.lastPlay) {
-            let lastPlayerName = gameState.players.find(p=>p.id===gameState.lastPlay.playerId)?.name || "未知";
-            tableStatus.innerHTML = `上一家 【${lastPlayerName}】 声称打出了：<br><span style="color:#f1c40f; font-size:20px;">${gameState.lastPlay.num} 张 ${CARD_TYPES[gameState.lastPlay.type].name}</span>`;
+            let targetPlayerName = gameState.players.find(p=>p.id===gameState.lastPlay.playerId)?.name || "未知";
+            tableStatus.innerHTML = `目标玩家 【${targetPlayerName}】 曾声称打出：<br><span style="color:#f1c40f; font-size:20px;">${gameState.lastPlay.num} 张 ${CARD_TYPES[gameState.lastPlay.type].name}</span>`;
         } else {
-            tableStatus.innerText = "桌面已清空，可任意发起数量和类型";
+            tableStatus.innerText = "桌面目前空空如也，可自由定义牌型数量";
         }
 
+        // 刷新玩家气泡列表
         let gamePlayersList = document.getElementById("gamePlayersList");
         gamePlayersList.innerHTML = "";
         gameState.players.forEach((p, idx) => {
             let pCard = document.createElement("div");
             pCard.className = "player-card";
-            if (gameState.phase === "WAIT_PLAY" && idx === gameState.currentTurnIdx) pCard.classList.add("active-turn");
-            let nextIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
-            if (gameState.phase === "WAIT_RESPOND" && idx === nextIdx) pCard.classList.add("active-turn");
+            if (!gameState.gameOver && idx === gameState.currentTurnIdx) {
+                pCard.classList.add("active-turn");
+            }
             pCard.innerHTML = `<strong>${p.name}</strong><br>🎴 剩 ${p.cardCount} 张`;
             gamePlayersList.appendChild(pCard);
         });
 
         hideAllControls();
-        if (gameState.phase === "WAIT_PLAY" && isMyTurn) {
-            document.getElementById("playControls").style.display = "flex";
-            let typeSelect = document.getElementById("claimTypeSelect");
-            if (gameState.lastPlay) {
-                typeSelect.value = gameState.lastPlay.type;
-                typeSelect.disabled = true;
-                document.getElementById("claimNumInput").value = parseInt(gameState.lastPlay.num) + 1;
-                document.getElementById("claimNumInput").min = parseInt(gameState.lastPlay.num) + 1;
-            } else {
-                typeSelect.disabled = false;
-                document.getElementById("claimNumInput").min = 1;
-                document.getElementById("claimNumInput").value = 1;
-            }
-        } else if (gameState.phase === "WAIT_RESPOND") {
-            let nextPlayerIdx = (gameState.currentTurnIdx + 1) % gameState.players.length;
-            if (gameState.players[nextPlayerIdx].id === myId) {
-                document.getElementById("respondControls").style.display = "flex";
-            } else {
-                document.getElementById("waitMsg").style.display = "block";
+        if (gameState.gameOver) return;
+
+        // 核心操控面板精准解控
+        if (isMyTurn) {
+            if (gameState.phase === "WAIT_RESPOND") {
+                // 如果桌面有牌，必须先过翻牌关
+                if (gameState.lastPlay) {
+                    document.getElementById("respondControls").style.display = "flex";
+                } else {
+                    // 桌面如果本来就是空的，直接无缝跳过质疑期，直接可以出牌
+                    document.getElementById("playControls").style.display = "flex";
+                    setupPlaySelectors(false);
+                }
+            } else if (gameState.phase === "WAIT_PLAY") {
+                // 已经点了不翻牌，或者桌面安全，此时决定加码还是Pass
+                document.getElementById("playControls").style.display = "flex";
+                setupPlaySelectors(gameState.lastPlay !== null);
             }
         } else {
             document.getElementById("waitMsg").style.display = "block";
         }
         renderMyHand();
+    }
+
+    function setupPlaySelectors(isForcedToUpgrade) {
+        let typeSelect = document.getElementById("claimTypeSelect");
+        let passBtn = document.getElementById("passBtn");
+        
+        if (isForcedToUpgrade) {
+            typeSelect.value = gameState.lastPlay.type;
+            typeSelect.disabled = true;
+            document.getElementById("claimNumInput").value = parseInt(gameState.lastPlay.num) + 1;
+            document.getElementById("claimNumInput").min = parseInt(gameState.lastPlay.num) + 1;
+            passBtn.style.display = "block"; 
+        } else {
+            typeSelect.disabled = false;
+            document.getElementById("claimNumInput").min = 1;
+            document.getElementById("claimNumInput").value = 1;
+            passBtn.style.display = "none"; 
+        }
     }
 
     function hideAllControls() {
@@ -680,6 +746,7 @@ input:focus, select:focus { border-color: #f29fb6; }
             cardDiv.innerText = CARD_TYPES[cardType].name;
             
             cardDiv.onclick = () => {
+                if (gameState.gameOver) return;
                 if (selectedCardsIdx.includes(idx)) {
                     selectedCardsIdx = selectedCardsIdx.filter(i => i !== idx);
                 } else {
@@ -687,7 +754,8 @@ input:focus, select:focus { border-color: #f29fb6; }
                 }
                 cardDiv.classList.toggle("selected");
                 document.getElementById("selectedCount").innerText = selectedCardsIdx.length;
-                if (gameState.phase === "WAIT_PLAY") {
+                
+                if (gameState.phase === "WAIT_PLAY" && gameState.players[gameState.currentTurnIdx].id === myId) {
                     document.getElementById("claimNumInput").value = Math.max(selectedCardsIdx.length, document.getElementById("claimNumInput").min);
                 }
             };
@@ -696,7 +764,7 @@ input:focus, select:focus { border-color: #f29fb6; }
     }
 
     function submitPlay() {
-        if (selectedCardsIdx.length === 0) return alert("请先在下方手牌区选择要打出的牌（可多选虚晃一枪）！");
+        if (selectedCardsIdx.length === 0) return alert("请先在下方手牌区选择你要打出的真实底牌（可真可假）！");
         let claimType = document.getElementById("claimTypeSelect").value;
         let claimNum = parseInt(document.getElementById("claimNumInput").value);
         
@@ -724,6 +792,17 @@ input:focus, select:focus { border-color: #f29fb6; }
                 claimNum: claimNum,
                 actualCards: actualCards
             });
+        }
+    }
+
+    function submitPass() {
+        selectedCardsIdx = []; 
+        document.getElementById("selectedCount").innerText = 0;
+        
+        if (isHost) {
+            processPass(myId);
+        } else {
+            hostConn.send({ type: "ACTION_PASS", playerId: myId });
         }
     }
 
